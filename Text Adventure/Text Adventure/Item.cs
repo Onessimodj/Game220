@@ -13,16 +13,16 @@ public class Item : IInspectable
         Description = description;
     }
 
-    // Show the full description when inspecting an item
+   
     public void Inspect()
     {
         Console.WriteLine(Description);
     }
 
-    // Return only the name of the item for 'look' command
+  
     public string GetName()
     {
-        return Name;  // Return only the name of the item
+        return Name; 
     }
 }
 

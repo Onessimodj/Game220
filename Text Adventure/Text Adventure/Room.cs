@@ -9,7 +9,7 @@ public class Room : IInspectable //Room class inherites from interface
     public Dictionary<string, Room> Exits { get; } //Dictionary 
     public List<IInspectable> Inspectables { get; } //List
 
-    public Room(string name, string description)
+    public Room(string name, string description) //Constructor
     {
         Name = name;
         Description = description;
@@ -31,14 +31,14 @@ public class Room : IInspectable //Room class inherites from interface
     public void Inspect()
     {
         Console.WriteLine(Description);
-        Console.WriteLine($"Exits: {string.Join(", ", Exits.Keys)}");
+        Console.WriteLine($"Exits: {string.Join(", ", Exits.Keys)}"); //Tells player where they can move
         
         if (Inspectables.Count > 0)
         {
             Console.WriteLine("You can inspect the following:");
             foreach (var inspectable in Inspectables)
             {
-                Console.WriteLine($"- {inspectable.GetName()}"); 
+                Console.WriteLine($"- {inspectable.GetName()}"); //Writes all items/inspectables in room
             }
         }
     }
