@@ -1,31 +1,26 @@
 using System;
+
 namespace TextAdventure
 {
-   
-public class Item : IInspectable
-{
-    public string Name { get; }
-    public string Description { get; }
-
-    public Item(string name, string description)
+    public class Item : IInspectable
     {
-        Name = name;
-        Description = description;
-    }
+        public string Name { get; }
+        public string Description { get; }
 
-   
-    public void Inspect()
-    {
-        Console.WriteLine(Description);
-    }
+        public Item(string name, string description) //Constructor for Item
+        {
+            Name = name;
+            Description = description;
+        }
 
-  
-    public string GetName()
-    {
-        return Name; 
+        public void Inspect()
+        {
+            Console.WriteLine(Description);
+        }
+
+        public string GetName()
+        {
+            return Name;
+        }
     }
 }
-
-}
-
-    
