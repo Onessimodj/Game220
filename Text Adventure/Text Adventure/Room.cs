@@ -3,19 +3,21 @@ using System.Collections.Generic;
 
 namespace TextAdventure
 {
-    public class Room : IInspectable // Room class inherits from IInspectable
+    public class Room : IInspectable //Room class inherits from IInspectable interface
     {
         public string Name { get; }
         public string Description { get; }
-        public Dictionary<string, Room> Exits { get; } // Dictionary for room exits
-        public List<IInspectable> Inspectables { get; } // List of items/inspectables in the room
+        public Dictionary<string, Room> Exits { get; } //Dictionary for room exits
+        public List<IInspectable> Inspectables { get; } //List of items/inspectables in the room
+        public bool IsLocked {get; private set;}
 
-        public Room(string name, string description) // Constructor for Room
+        public Room(string name, string description) //Constructor for Room
         {
             Name = name;
             Description = description;
             Exits = new Dictionary<string, Room>();
             Inspectables = new List<IInspectable>();
+            IsLocked = true;
         }
 
         public void AddExit(string direction, Room room)
@@ -28,6 +30,11 @@ namespace TextAdventure
             Inspectables.Add(inspectable);
         }
 
+        public void Unlock()
+        {
+            IsLocked = false;
+        }
+
         public void Inspect()
         {
             Console.WriteLine(Description);
@@ -38,7 +45,7 @@ namespace TextAdventure
                 Console.WriteLine("You can inspect and take the following:");
                 foreach (var inspectable in Inspectables)
                 {
-                    Console.WriteLine($"- {inspectable.GetName()}"); // List inspectable items
+                    Console.WriteLine($"- {inspectable.GetName()}"); //List items
                 }
             }
         }

@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Net.Mail;
+using System.Security.Cryptography.X509Certificates;
 
 namespace TextAdventure
 {
@@ -38,8 +40,21 @@ namespace TextAdventure
                     _currentInspectable.Inspect();
                     break;
 
+                case "inspect":
+                    Console.WriteLine("What are you trying to inspect?");
+                    break;
+
                 case var cmd when cmd.StartsWith("inspect"):
-                    InspectItem(command);
+                string itemName = command.Substring(7).Trim();
+                InspectItem(itemName);
+                break;
+
+                case var cmd when cmd.StartsWith("unlock door"):
+                    UseKey();
+                    break;
+
+                case var cmd when cmd.StartsWith("open door"):
+                    UseKey();
                     break;
 
                 case "exit game":
@@ -128,6 +143,42 @@ namespace TextAdventure
             Console.WriteLine($"You don't have an item named '{itemName}' in your inventory.");
         }
     }
+   private void UseKey()
+{
+    if (_playerInventory.HasItem("Key"))
+    {
+        if (_currentInspectable is Room room && room.Name == "Basement Door")
+        {
+            if (room.Exits.ContainsKey("south"))
+            {
+                var basementDoor = room.Exits["south"];
+
+                if (basementDoor.IsLocked) 
+                {
+                    basementDoor.Unlock();
+                    Console.WriteLine("You used the key to unlock the basement door.");
+                    StartBattle();
+                }
+                else
+                {
+                    Console.WriteLine("The basement door is already unlocked.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("There is no basement door here.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("There is nothing to unlock here.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("You don't have the key to unlock the door.");
+    }
+}
 
         private void ConfirmExit()
         {
@@ -145,44 +196,60 @@ namespace TextAdventure
             }
         }
 
-        private void Move(string direction)
+private void Move(string direction)
+{
+    if (_currentInspectable is Room room)
+    {
+        if (room.Name == "Basement Door" && direction == "south" && room.Exits.ContainsKey(direction))
         {
-            if (_currentInspectable is Room room && room.Exits.ContainsKey(direction))
+            var basementDoor = room.Exits[direction];
+            if (basementDoor.IsLocked)
             {
-                _currentInspectable = room.Exits[direction];
-                Console.WriteLine($"You move {direction}.");
-            }
-            else
-            {
-                Console.WriteLine("That is not a valid direction. I'm not sure where you are trying to go... :( ");
+                Console.WriteLine("The basement door is locked! You can't go in.");
+                return;  
             }
         }
 
-        private void InspectItem(string itemName)
+        if (room.Exits.ContainsKey(direction))
         {
-            if (_currentInspectable is Room room)
-            {
-                if (itemName.Length == 8)
-                {
-                    Console.WriteLine("What would you like to inspect? Please specify an item.");
-                }
-                else
-                {
-                    var item = room.Inspectables.OfType<Item>().FirstOrDefault(i => i.Name.ToLower() == itemName.ToLower());
-                    if (item != null)
-                    {
-                        item.Inspect();
-                    }
-                    else
-                    {
-                        Console.WriteLine($"There is no item named '{itemName}' here.");
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("There is nothing to inspect.");
-            }
+            _currentInspectable = room.Exits[direction];
+            Console.WriteLine($"You move {direction}.");
         }
+        else
+        {
+            Console.WriteLine("That is not a valid direction.");
+        }
+    }
+}
+
+
+
+private void StartBattle()
+{
+    string playerName = "Kyle"; 
+    Duel battle = new Duel(playerName);
+    battle.StartBattle(); 
+}
+
+private void InspectItem(string itemName)
+{
+    if (_currentInspectable is Room room)
+    {
+        var item = room.Inspectables.OfType<Item>().FirstOrDefault(i => i.Name.ToLower() == itemName.ToLower());
+        if (item != null)
+        {
+            item.Inspect();
+        }
+        else
+        {
+            Console.WriteLine($"There is no item named '{itemName}' here.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("There is nothing to inspect.");
+    }
+}
+
     }
 }

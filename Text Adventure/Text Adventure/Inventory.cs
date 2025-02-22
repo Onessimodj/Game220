@@ -25,7 +25,7 @@ namespace TextAdventure
         return _items.Remove(item);
     }
 
-    public bool HasItem(string itemName)
+    public bool HasItem(string itemName) //bool to check if player has item
     {
         return _items.Any(i => i.GetName().ToLower() == itemName.ToLower());
     }
