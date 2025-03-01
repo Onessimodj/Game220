@@ -3,21 +3,20 @@ using System.Collections.Generic;
 
 namespace TextAdventure
 {
-    public class Room : IInspectable //Room class inherits from IInspectable interface
+    public class Room : IInspectable
     {
         public string Name { get; }
         public string Description { get; }
-        public Dictionary<string, Room> Exits { get; } //Dictionary for room exits
-        public List<IInspectable> Inspectables { get; } //List of items/inspectables in the room
-        public bool IsLocked {get; private set;}
+        public Dictionary<string, Room> Exits { get; }
+        public List<IInspectable> Inspectables { get; } = new List<IInspectable>();
+        public bool IsLocked { get; private set; }
 
-        public Room(string name, string description) //Constructor for Room
+        public Room(string name, string description, bool isLocked = false)
         {
             Name = name;
             Description = description;
             Exits = new Dictionary<string, Room>();
-            Inspectables = new List<IInspectable>();
-            IsLocked = true;
+            IsLocked = isLocked;
         }
 
         public void AddExit(string direction, Room room)
@@ -33,19 +32,37 @@ namespace TextAdventure
         public void Unlock()
         {
             IsLocked = false;
+            Console.WriteLine($"{Name} has been unlocked!");
         }
+        public void LoadRoomInventory(List<Item> items)
+        {
+         Inspectables.Clear();
+         foreach (var item in items)
+         {
+              AddInspectable(item);
+         }
+        }
+
 
         public void Inspect()
         {
-            Console.WriteLine(Description);
-            Console.WriteLine($"Exits: {string.Join(", ", Exits.Keys)}"); //exits
+            Console.WriteLine($"{Name} - {Description}");
 
             if (Inspectables.Count > 0)
             {
-                Console.WriteLine("You can inspect and take the following:");
-                foreach (var inspectable in Inspectables)
+                Console.WriteLine("You see:");
+                foreach (var item in Inspectables)
                 {
-                    Console.WriteLine($"- {inspectable.GetName()}"); //List items
+                    Console.WriteLine($"- {item.GetName()}");
+                }
+            }
+
+            if (Exits.Count > 0)
+            {
+                Console.WriteLine("Exits:");
+                foreach (var exit in Exits.Keys)
+                {
+                    Console.WriteLine($"- {exit}");
                 }
             }
         }

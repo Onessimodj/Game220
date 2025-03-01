@@ -11,10 +11,10 @@ namespace TextAdventure
 
     public Duel(string name)
     {
-        Random rng = new Random();
-        health = rng.Next(100, 151);
-        defense = rng.Next(25, 50);
-        attack = rng.Next(25, 45);
+        Random rng = new Random(); //Randomizing stats for player
+        health = rng.Next(110, 151);
+        defense = rng.Next(28, 50);
+        attack = rng.Next(28, 45);
 
         OName = "The Monster";
         OHealth = 160;
@@ -31,15 +31,19 @@ namespace TextAdventure
             Console.WriteLine("Do you want to attack, or defend?");
             string action = Console.ReadLine().ToLower();
 
-            if (action == "attack")
+            if (action.ToLower().Trim() == "attack")
             {
                 Attack();
                 CheckWin(ref check);
             }
-            if (action == "defend")
+            if (action.ToLower().Trim() == "defend")
             {
                 Defend();
                 CheckWin(ref check);
+            }
+            if (action.ToLower().Trim() != "attack" && action != "defend")
+            {
+                Console.WriteLine("Action not found, try 'attack' or 'defend'");
             }
 
             if (check) 
