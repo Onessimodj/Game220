@@ -27,7 +27,7 @@ namespace TextAdventure
 
        public Game(Room startingRoom)
         {
-         CurrentRoom = startingRoom ?? throw new ArgumentNullException(nameof(startingRoom)); //Chat cpt helped me figure out an solution to an exception and used nullable types here to avoid crashing/exception
+         CurrentRoom = startingRoom ?? throw new ArgumentNullException(nameof(startingRoom)); //Found this online: solution to an exception and used nullable types here to avoid crashing/exception
          _currentInspectable = startingRoom; 
          _currentState = GameState.PlayingGame;
          _playerInventory = new Inventory();

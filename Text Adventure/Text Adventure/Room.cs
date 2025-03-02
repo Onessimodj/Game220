@@ -11,7 +11,7 @@ namespace TextAdventure
         public List<IInspectable> Inspectables { get; } = new List<IInspectable>();
         public bool IsLocked { get; private set; }
 
-        public Room(string name, string description, bool isLocked = false)
+        public Room(string name, string description, bool isLocked = true)
         {
             Name = name;
             Description = description;
